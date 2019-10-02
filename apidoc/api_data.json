@@ -1,0 +1,659 @@
+[
+  {
+    "group": "Event",
+    "version": "1.0.0",
+    "type": "get",
+    "url": "/api/v1/users/:eventId/getone",
+    "title": "Fetch a particular Event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventId",
+            "description": "<p>Id of the Event. (query params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Event fetched successfully\",\n           \"status\": 200,\n           \"data\": {\n                       adminId: \"1Po7901p\"\n                       adminName: \"Anto Benister\"\n                       color: {primary: \"#7c649b\"}\n                       createdOn: \"2019-10-01T18:29:54.000Z\"\n                       end: Wed Oct 16 2019 23:59:59 GMT+0530 (India Standard Time) {}\n                       endHour: 23\n                       endMinute: 59\n                       eventId: \"7DAdTq8F\"\n                       location: \"check\"\n                       modifiedOn: null\n                       purpose: \"check\"\n                       start: Sat Oct 05 2019 23:59:00 GMT+0530 (India Standard Time) {}\n                       startHour: 23\n                       startMinute: 59\n                       title: \"Check\"\n                       userId: \"WJa0F9ja\"\n                   }\n           }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "Event",
+    "name": "GetApiV1UsersEventidGetone"
+  },
+  {
+    "group": "Event",
+    "version": "1.0.0",
+    "type": "get",
+    "url": "/api/v1/users/:userId/view",
+    "title": "Get All Events",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>Id of the user. (query params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"All events fetched successfully\",\n           \"status\": 200,\n           \"data\": [{\n                       adminId: \"1Po7901p\"\n                       adminName: \"Anto Benister\"\n                       color: {primary: \"#7c649b\"}\n                       createdOn: \"2019-10-01T18:29:54.000Z\"\n                       end: Wed Oct 16 2019 23:59:59 GMT+0530 (India Standard Time) {}\n                       endHour: 23\n                       endMinute: 59\n                       eventId: \"7DAdTq8F\"\n                       location: \"check\"\n                       modifiedOn: null\n                       purpose: \"check\"\n                       start: Sat Oct 05 2019 23:59:00 GMT+0530 (India Standard Time) {}\n                       startHour: 23\n                       startMinute: 59\n                       title: \"Check\"\n                       userId: \"WJa0F9ja\"\n                   }]\n           }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "Event",
+    "name": "GetApiV1UsersUseridView"
+  },
+  {
+    "group": "Event",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/v1/users/create",
+    "title": "Schedule an Event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "title",
+            "description": "<p>Title of the event. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "location",
+            "description": "<p>location of the event. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "purpose",
+            "description": "<p>Purpose of the event. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "color",
+            "description": "<p>Color to show on calender. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "start",
+            "description": "<p>Date of event start. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": false,
+            "field": "startHour",
+            "description": "<p>Hour of event start. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": false,
+            "field": "startMinute",
+            "description": "<p>Minute of event start. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Date",
+            "optional": false,
+            "field": "end",
+            "description": "<p>Date of event end. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": false,
+            "field": "endHour",
+            "description": "<p>Hour of event end. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "number",
+            "optional": false,
+            "field": "endMinute",
+            "description": "<p>Minute of event end. (body params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Event created successfully\",\n           \"status\": 200,\n           \"data\": {\n                       adminId: \"1Po7901p\"\n                       adminName: \"Anto Benister\"\n                       color: {primary: \"#7c649b\"}\n                       createdOn: \"2019-10-01T18:29:54.000Z\"\n                       end: Wed Oct 16 2019 23:59:59 GMT+0530 (India Standard Time) {}\n                       endHour: 23\n                       endMinute: 59\n                       eventId: \"7DAdTq8F\"\n                       location: \"check\"\n                       modifiedOn: null\n                       purpose: \"check\"\n                       start: Sat Oct 05 2019 23:59:00 GMT+0530 (India Standard Time) {}\n                       startHour: 23\n                       startMinute: 59\n                       title: \"Check\"\n                       userId: \"WJa0F9ja\"\n                   }\n           }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "Event",
+    "name": "PostApiV1UsersCreate"
+  },
+  {
+    "group": "Event",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/v1/users/:eventId/delete",
+    "title": "Delete an event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventId",
+            "description": "<p>Id of the event. (query params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Event deleted successfully\",\n           \"status\": 200,\n           \"data\": null\n           }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "Event",
+    "name": "PostApiV1UsersEventidDelete"
+  },
+  {
+    "group": "Event",
+    "version": "1.0.0",
+    "type": "put",
+    "url": "/api/v1/users/:eventId/edit",
+    "title": "Edit an event",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "eventId",
+            "description": "<p>Id of the event. (query params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Event edited successfully\",\n           \"status\": 200,\n           \"data\": {\n                       adminId: \"1Po7901p\"\n                       adminName: \"Anto Benister\"\n                       color: {primary: \"#7c649b\"}\n                       createdOn: \"2019-10-01T18:29:54.000Z\"\n                       end: Wed Oct 16 2019 23:59:59 GMT+0530 (India Standard Time) {}\n                       endHour: 23\n                       endMinute: 59\n                       eventId: \"7DAdTq8F\"\n                       location: \"check\"\n                       modifiedOn: null\n                       purpose: \"check\"\n                       start: Sat Oct 05 2019 23:59:00 GMT+0530 (India Standard Time) {}\n                       startHour: 23\n                       startMinute: 59\n                       title: \"Check\"\n                       userId: \"WJa0F9ja\"\n                   }\n           }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500/404,\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "Event",
+    "name": "PutApiV1UsersEventidEdit"
+  },
+  {
+    "group": "User",
+    "version": "1.0.0",
+    "type": "get",
+    "url": "/api/users/allUsers",
+    "title": "Get all Users data",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "authToken",
+            "description": "<p>The token for authentication.(Send authToken as query parameter, body parameter or as a header)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n      \"error\": false,\n      \"message\": \"All users fetched successfully\",\n      \"status\": 200,\n      \"data\": [ {\n             email: \"bejojeffrin23@gmail.com\"\n             firstName: \"Bejo\"\n             isAdmin: false\n             lastName: \"Jeffrin\"\n             mobileNumber: \"376-944\"\n             userId: \"WSa0F9ja\"\n             userName: \"Bejo-user\"\n        }]\n                \n      }\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n   \"error\": true,\n   \"message\": \"Error Occured\",\n   \"status\": 500/404,\n   \"data\": null\n  }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "User",
+    "name": "GetApiUsersAllusers"
+  },
+  {
+    "group": "User",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/users/reset",
+    "title": "To send email with link to reset password",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>as Body parameter.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Please click on the link sent to your registered email.\",\n           \"status\": 200,\n           \"data\": \"null(Email will be sent your registered email address with link to reset password)\"\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500\n\t    \"data\": [ {\n              email: \"bejojeffrin23@gmail.com\"\n              firstName: \"Bejo\"\n              isAdmin: false\n              lastName: \"Jeffrin\"\n              mobileNumber: \"376-944\"\n              userId: \"WSa0F9ja\"\n              userName: \"Bejo-user\"\n         }]\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "User",
+    "name": "PostApiUsersReset"
+  },
+  {
+    "group": "User",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/users/:userId/change",
+    "title": "To reset password",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>as Body parameter.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n           \"error\": false,\n           \"message\": \"Password changed successfully.\",\n           \"status\": 200,\n           \"data\": \"result\"\n       }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n\t    \"error\": true,\n\t    \"message\": \"Error Occured\",\n\t    \"status\": 500\n\t    \"data\": null\n\t   }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "User",
+    "name": "PostApiUsersUseridChange"
+  },
+  {
+    "group": "User",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/v1/users/login",
+    "title": "user login.",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the user. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "string",
+            "optional": false,
+            "field": "password",
+            "description": "<p>password of the user. (body params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    {\n       \"error\": false,\n       \"message\": \"Login Successful\",\n       \"status\": 200,\n       \"data\": {\n           \"authToken\": \"eyJhbGciOiJIUertyuiopojhgfdwertyuVCJ9.MCwiZXhwIjoxNTIwNDI29tIiwibGFzdE5hbWUiE4In19.hAR744xIY9K53JWm1rQ2mc\",\n           \"userDetails\": {\n            email: \"bejojeffrin23@gmail.com\"\n            firstName: \"Bejo\"\n            isAdmin: false\n            lastName: \"Jeffrin\"\n            mobileNumber: \"376-944\"\n            userId: \"WSa0F9ja\"\n            userName: \"Bejo-user\"\n       }\n   }\n}",
+          "type": "object"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n         \"error\": true,\n         \"message\": \"Error message\",\n         \"status\": 500/404/403,\n         \"data\": null\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "User",
+    "name": "PostApiV1UsersLogin"
+  },
+  {
+    "group": "User",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/v1/users/logout",
+    "title": "to logout user.",
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " {\n    \"error\": false,\n    \"message\": \"Logged Out Successfully\",\n    \"status\": 200,\n    \"data\": null\n\n}",
+          "type": "object"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n         \"error\": true,\n         \"message\": \"Error message\",\n         \"status\": 500/404/403,\n         \"data\": null\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "User",
+    "name": "PostApiV1UsersLogout"
+  },
+  {
+    "group": "User",
+    "version": "1.0.0",
+    "type": "post",
+    "url": "/api/v1/users/signup",
+    "title": "SignUp User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "firstName",
+            "description": "<p>First name of the user. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "lastName",
+            "description": "<p>lastName of the user. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "number",
+            "description": "<p>mobile number of the user. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>email of the user. (body params) (required)</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>password of the user. (body params) (required)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "myResponse",
+            "description": "<p>shows error status, message, http status code, result.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "{\n        \"error\": false,\n        \"message\": \"User created successfully\",\n        \"status\": 200,\n        \"data\": {\n                email: \"meetingscheduler1234@gmail.com\"\n                firstName: \"Check\"\n                isAdmin: false\n                lastName: \"Check\"\n                mobileNumber: \"971-999999999\"\n                password: \"223388\"\n                userName: \"Check-user\"\n                }\n            }",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "\n{\n         \"error\": true,\n         \"message\": \"Error message\",\n         \"status\": 500/404/403,\n         \"data\": null\n        }",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "app/routes/user.js",
+    "groupTitle": "User",
+    "name": "PostApiV1UsersSignup"
+  }
+]
