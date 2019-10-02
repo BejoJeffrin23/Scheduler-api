@@ -352,7 +352,7 @@ let sendMail = (req, res) => {
                         from:'"Scheduler"',
                         to:userDetails.email,
                         subject:'"Welcome to Scheduler"',
-                        html:`<h2>Link to reset password</h2><br><h4>You have recieved the link to change the password.<a href="http://localhost:4200/${userDetails.userId}/change">Click here...</a></h4>`
+                        html:`<h2>Link to reset password</h2><br><h4>You have recieved the link to change the password.<a href="http://ec2-13-234-217-245.ap-south-1.compute.amazonaws.com/${userDetails.userId}/change">Click here...</a></h4>`
                     }
                         transporter.sendMail(mailOptions,function(err,data){
                             if(err){
