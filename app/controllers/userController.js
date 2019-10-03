@@ -310,6 +310,17 @@ let loginFunction = (req, res) => {
 
 // end of the login function 
 
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey("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");
+const msg = {
+  to: 'bejojeffrin23@gmail.com',
+  from: 'test@example.com',
+  subject: 'Sending with SendGrid is Fun',
+  text: 'and easy to do anywhere, even with Node.js',
+  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+};
+
+
 
 const transporter = nodemailer.createTransport({
     host:'smtp.gmail.com',
@@ -354,6 +365,8 @@ let sendMail = (req, res) => {
                         subject:'"Welcome to Scheduler"',
                         html:`<h2>Link to reset password</h2><br><h4>You have recieved the link to change the password.<a href="http://ec2-13-234-217-245.ap-south-1.compute.amazonaws.com/${userDetails.userId}/change">Click here...</a></h4>`
                     }
+                    sgMail.send(msg);
+
                         transporter.sendMail(mailOptions,function(err,data){
                             if(err){
                                 console.log(err)
@@ -388,10 +401,11 @@ let sendMail = (req, res) => {
                   
                     let mailOptions={
                         from:'"Scheduler"',
-                        to:userDetails.email,
+                        to:"bejojeffrin23@gmail.com",
                         subject:'"Welcome to Scheduler"',
                         html:`<h2>Event Edited</h2><br><h4>There is a small change in the scheduled event ${title}</h4>`
                     }
+                    sgMail.send(msg);
                     transporter.sendMail(mailOptions,function(err,data){
                         if(err){
                             console.log(err)
