@@ -310,15 +310,6 @@ let loginFunction = (req, res) => {
 
 // end of the login function 
 
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey("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");
-const msg = {
-  to: 'bejojeffrin23@gmail.com',
-  from: 'test@example.com',
-  subject: 'Sending with SendGrid is Fun',
-  text: 'and easy to do anywhere, even with Node.js',
-  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-};
 
 
 
@@ -405,7 +396,7 @@ let sendMail = (req, res) => {
                         subject:'"Welcome to Scheduler"',
                         html:`<h2>Event Edited</h2><br><h4>There is a small change in the scheduled event ${title}</h4>`
                     }
-                    sgMail.send(msg);
+                    
                     transporter.sendMail(mailOptions,function(err,data){
                         if(err){
                             console.log(err)
