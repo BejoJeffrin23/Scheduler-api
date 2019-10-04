@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const nodemailer=require('nodemailer')
+const nodemailer = require('nodemailer')
 const shortid = require('shortid');
 const time = require('./../libs/timeLib');
 const response = require('./../libs/responseLib')
@@ -57,7 +57,7 @@ let signUpFunction = (req, res) => {
                             mobileNumber: req.body.mobileNumber,
                             password: passwordLib.hashpassword(req.body.password),
                             isAdmin: req.body.isAdmin,
-                            userName:req.body.userName
+                            userName: req.body.userName
                         })
                         newUser.save((err, newUser) => {
                             if (err) {
@@ -314,219 +314,259 @@ let loginFunction = (req, res) => {
 
 
 const transporter = nodemailer.createTransport({
-    host:'smtp.gmail.com',
+    host: 'smtp.gmail.com',
     port: 465,
     secure: false,
+    pool: true,
     service: "gmail",
     tls: {
         rejectUnauthorized: false
     },
     auth: {
-        user:'meetingscheduler1234@gmail.com',
-        pass:'schedule'
+        user: 'meetingscheduler1234@gmail.com',
+        pass: 'schedule'
     }
 });
 
 //start of mail to reset password
 let sendMail = (req, res) => {
-            if (req.body.email) {
-                console.log(req.body);
-                UserModel.findOne({ email: req.body.email }, (err, userDetails) => {
-                    /* handle the error here if the User is not found */
+    if (req.body.email) {
+        console.log(req.body);
+        UserModel.findOne({ email: req.body.email }, (err, userDetails) => {
+            /* handle the error here if the User is not found */
+            if (err) {
+                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
+                /* generate the error message and the api response message here */
+                let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(userDetails)) {
+                /* generate the response and the console error message here */
+                logger.error('No User Found', 'userController: findUser()', 7)
+                let apiResponse = response.generate(true, 'No User Details Found', 404, null)
+                res.send(apiResponse)
+            } else {
+                /* prepare the message and the api response here */
+                logger.info('User Found', 'userController: findUser()', 10)
+                let apiResponse = response.generate(false, 'User Details Found', 200, userDetails)
+                res.send(apiResponse)
+
+
+                let mailOptions = {
+                    from: '"Scheduler"',
+                    to: userDetails.email,
+                    subject: '"Welcome to Scheduler"',
+                    html: `<h2>Link to reset password</h2><br><h4>You have recieved the link to change the password.<a href="http://ec2-13-234-217-245.ap-south-1.compute.amazonaws.com/${userDetails.userId}/change">Click here...</a></h4>`
+                }
+                sgMail.send(msg);
+
+                transporter.sendMail(mailOptions, function (err, data) {
                     if (err) {
-                        logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
-                        /* generate the error message and the api response message here */
-                        let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
-                        res.send(apiResponse)
-                    } else if (check.isEmpty(userDetails)) {
-                        /* generate the response and the console error message here */
-                        logger.error('No User Found', 'userController: findUser()', 7)
-                        let apiResponse = response.generate(true, 'No User Details Found', 404, null)
+                        console.log(err)
+                    }
+                    else {
+                        console.log('Reset Code send successfully')
+                    }
+                })
+
+            }
+        });
+
+    } else {
+        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
+        reject(apiResponse)
+    }
+}
+
+let sendEditedMail = (userId, title) => {
+    if (userId) {
+        UserModel.findOne({ userId: userId }, (err, userDetails) => {
+            /* handle the error here if the User is not found */
+            if (err) {
+                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
+                /* generate the error message and the api response message here */
+            } else if (check.isEmpty(userDetails)) {
+                /* generate the response and the console error message here */
+                logger.error('No User Found', 'userController: findUser()', 7)
+            } else {
+                /* prepare the message and the api response here */
+                logger.info('User Found', 'userController: findUser()', 10)
+
+                let mailOptions = {
+                    from: '"Scheduler"',
+                    to: userDetails.email,
+                    subject: '"Welcome to Scheduler"',
+                    html: `<h2>Event Edited</h2><br><h4>There is a small change in the scheduled event ${title}</h4>`
+                }
+
+                transporter.sendMail(mailOptions, function (err, data) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    else {
+                        console.log('mail for edit send successfully')
+                    }
+                })
+
+            }
+        });
+
+    } else {
+        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
+        reject(apiResponse)
+    }
+}
+
+
+
+
+
+let sendDeletedMail = (userId, title) => {
+    if (userId) {
+        UserModel.findOne({ userId: userId }, (err, userDetails) => {
+            /* handle the error here if the User is not found */
+            if (err) {
+                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
+                /* generate the error message and the api response message here */
+            } else if (check.isEmpty(userDetails)) {
+                /* generate the response and the console error message here */
+                logger.error('No User Found', 'userController: findUser()', 7)
+            } else {
+                /* prepare the message and the api response here */
+                logger.info('User Found', 'userController: findUser()', 10)
+
+                let mailOptions = {
+                    from: '"Scheduler"',
+                    to: userDetails.email,
+                    subject: '"Welcome to Scheduler "',
+                    html: `<h2>Event cancelled</h2><br><h4>The scheduled event ${title} is cancelled </h4>`
+
+                }
+                transporter.sendMail(mailOptions, function (err, data) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    else {
+                        console.log('mail for delete sent successfully')
+                    }
+                })
+
+            }
+        });
+
+    } else {
+        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
+        reject(apiResponse)
+    }
+}
+
+let sendAlarmMail = (userId, title, name) => {
+    if (userId) {
+        UserModel.findOne({ userId: userId }, (err, userDetails) => {
+            /* handle the error here if the User is not found */
+            if (err) {
+                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
+                /* generate the error message and the api response message here */
+            } else if (check.isEmpty(userDetails)) {
+                /* generate the response and the console error message here */
+                logger.error('No User Found', 'userController: findUser()', 7)
+            } else {
+                /* prepare the message and the api response here */
+                logger.info('User Found', 'userController: findUser()', 10)
+
+                let mailOptions = {
+                    from: '"Scheduler"',
+                    to: userDetails.email,
+                    subject: '"Welcome to Scheduler "',
+                    html: `<h2>Event started</h2><br><h4>The scheduled event ${title} by  ${name} has started </h4>`
+
+                }
+                transporter.sendMail(mailOptions, function (err, data) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    else {
+                        console.log('Mail for alarm successfully')
+                    }
+                })
+
+            }
+        });
+
+    } else {
+        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
+        reject(apiResponse)
+    }
+}
+
+
+let sendCreatedMail = (userId, title) => {
+    if (userId) {
+        UserModel.findOne({ userId: userId }, (err, userDetails) => {
+            /* handle the error here if the User is not found */
+            if (err) {
+                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
+                /* generate the error message and the api response message here */
+            } else if (check.isEmpty(userDetails)) {
+                /* generate the response and the console error message here */
+                logger.error('No User Found', 'userController: findUser()', 7)
+            } else {
+                /* prepare the message and the api response here */
+                logger.info('User Found', 'userController: findUser()', 10)
+
+                let mailOptions = {
+                    from: '"Scheduler"',
+                    to: userDetails.email,
+                    subject: '"Welcome to Scheduler"',
+                    html: `<h2>Event scheduled</h2><br><h4>The event ${title} has been scheduled </h4>`
+
+                }
+                transporter.sendMail(mailOptions, function (err, data) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    else {
+                        console.log('Mail for create sent successfully')
+                    }
+                })
+
+            }
+        });
+
+    } else {
+        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
+        reject(apiResponse)
+    }
+}
+
+
+let changePassword = (req, res) => {
+    UserModel.findOne({ 'userId': req.params.userId })
+        .exec((err, result) => {
+            if (err) {
+                console.log(err)
+                let apiResponse = response.generate(true, 'error', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(result)) {
+                let apiResponse = response.generate(true, 'Event not found', 404, null)
+                res.send(apiResponse)
+            } else {
+                result.password = passwordLib.hashpassword(req.body.password),
+                    console.log(req.body)
+                console.log(result)
+                result.save(function (err, result) {
+                    if (err) {
+                        console.log(err)
+                        let apiResponse = response.generate(true, 'error at save', 500, null)
                         res.send(apiResponse)
                     } else {
-                        /* prepare the message and the api response here */
-                        logger.info('User Found', 'userController: findUser()', 10)
-                        let apiResponse = response.generate(false, 'User Details Found', 200, userDetails)
+                        let apiResponse = response.generate(false, 'password changed successfull', 200, result)
                         res.send(apiResponse)
-                      
-                        
-                    let mailOptions={
-                        from:'"Scheduler"',
-                        to:userDetails.email,
-                        subject:'"Welcome to Scheduler"',
-                        html:`<h2>Link to reset password</h2><br><h4>You have recieved the link to change the password.<a href="http://ec2-13-234-217-245.ap-south-1.compute.amazonaws.com/${userDetails.userId}/change">Click here...</a></h4>`
-                    }
-                    sgMail.send(msg);
-
-                        transporter.sendMail(mailOptions,function(err,data){
-                            if(err){
-                                console.log(err)
-                            }
-                            else {
-                                console.log('Reset Code send successfully')
-                            }
-                        })
-                    
-                    }
-                });
-    
-            } else {
-                let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
-                reject(apiResponse)
-            }
-    }
-  
-    let sendEditedMail = (userId,title) => {
-        if (userId) {
-            UserModel.findOne({ userId:userId }, (err, userDetails) => {
-                /* handle the error here if the User is not found */
-                if (err) {
-                    logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
-                    /* generate the error message and the api response message here */
-                } else if (check.isEmpty(userDetails)) {
-                    /* generate the response and the console error message here */
-                    logger.error('No User Found', 'userController: findUser()', 7)
-                } else {
-                    /* prepare the message and the api response here */
-                    logger.info('User Found', 'userController: findUser()', 10)
-                  
-                    let mailOptions={
-                        from:'"Scheduler"',
-                        to:"bejojeffrin23@gmail.com",
-                        subject:'"Welcome to Scheduler"',
-                        html:`<h2>Event Edited</h2><br><h4>There is a small change in the scheduled event ${title}</h4>`
-                    }
-                    
-                    transporter.sendMail(mailOptions,function(err,data){
-                        if(err){
-                            console.log(err)
-                        }
-                        else {
-                            console.log('Reset Code send successfully')
-                        }
-                    })
-                
-                }
-            });
-
-        } else {
-            let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
-            reject(apiResponse)
-        }
-}
-
-
-  
-    
-
-let sendDeletedMail = (userId,title) => {
-    if (userId) {
-        UserModel.findOne({ userId:userId }, (err, userDetails) => {
-            /* handle the error here if the User is not found */
-            if (err) {
-                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
-                /* generate the error message and the api response message here */
-            } else if (check.isEmpty(userDetails)) {
-                /* generate the response and the console error message here */
-                logger.error('No User Found', 'userController: findUser()', 7)
-            } else {
-                /* prepare the message and the api response here */
-                logger.info('User Found', 'userController: findUser()', 10)
-              
-                let mailOptions={
-                    from:'"Scheduler"',
-                    to:userDetails.email,
-                    subject:'"Welcome to Scheduler "',
-                    html:`<h2>Event cancelled</h2><br><h4>The scheduled event ${title} is cancelled </h4>`
-
-                }
-                transporter.sendMail(mailOptions,function(err,data){
-                    if(err){
-                        console.log(err)
-                    }
-                    else {
-                        console.log('Reset Code send successfully')
                     }
                 })
-            
+
             }
-        });
-
-    } else {
-        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
-        reject(apiResponse)
-    }
+        })
 }
-
-
-let sendCreatedMail = (userId,title) => {
-    if (userId) {
-        UserModel.findOne({ userId:userId }, (err, userDetails) => {
-            /* handle the error here if the User is not found */
-            if (err) {
-                logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
-                /* generate the error message and the api response message here */
-            } else if (check.isEmpty(userDetails)) {
-                /* generate the response and the console error message here */
-                logger.error('No User Found', 'userController: findUser()', 7)
-            } else {
-                /* prepare the message and the api response here */
-                logger.info('User Found', 'userController: findUser()', 10)
-              
-                let mailOptions={
-                    from:'"Scheduler"',
-                    to:userDetails.email,
-                    subject:'"Welcome to Scheduler"',
-                    html:`<h2>Event scheduled</h2><br><h4>The event ${title} has been scheduled </h4>`
-
-                }
-                transporter.sendMail(mailOptions,function(err,data){
-                    if(err){
-                        console.log(err)
-                    }
-                    else {
-                        console.log('Reset Code send successfully')
-                    }
-                })
-            
-            }
-        });
-
-    } else {
-        let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
-        reject(apiResponse)
-    }
-}
-
-
-    let changePassword = (req, res) => {
-        UserModel.findOne({ 'userId': req.params.userId })
-            .exec((err, result) => {
-                if (err) {
-                    console.log(err)
-                    let apiResponse = response.generate(true, 'error', 500, null)
-                    res.send(apiResponse)
-                } else if (check.isEmpty(result)) {
-                    let apiResponse = response.generate(true, 'Event not found', 404, null)
-                    res.send(apiResponse)
-                } else {
-                   result.password= passwordLib.hashpassword(req.body.password),
-                    console.log(req.body)
-                    console.log(result)
-                    result.save(function (err, result) {
-                        if (err) {
-                            console.log(err)
-                            let apiResponse = response.generate(true, 'error at save', 500, null)
-                            res.send(apiResponse)
-                        } else {
-                            let apiResponse = response.generate(false, 'password changed successfull', 200, result)
-                            res.send(apiResponse)
-                        }
-                    })
-    
-                }
-            })
-    }
 //end of edit Event function
 
 // start of log-out function
@@ -574,40 +614,42 @@ let getAllUser = (req, res) => {
 
 //start of create event function
 
-let create=(req,res)=>{
+let create = (req, res) => {
 
-    let newEvent=new EventModel({
+    let newEvent = new EventModel({
         eventId: shortid.generate(),
         title: req.body.title,
         start: req.body.start,
         end: req.body.end,
         startHour: req.body.startHour,
-        startMinute:req.body.startMinute,
+        startMinute: req.body.startMinute,
         endHour: req.body.endHour,
-        endMinute:req.body.endMinute,
+        endMinute: req.body.endMinute,
         adminId: req.body.adminId,
-        adminName:req.body.adminName,
+        adminName: req.body.adminName,
         userId: req.body.userId,
         color: req.body.color,
         createdOn: time.now(),
-        purpose:req.body.purpose,
-        location:req.body.location
+        purpose: req.body.purpose,
+        location: req.body.location
     })
 
-    newEvent.save((err,result)=>{ if (err) {
-        console.log(err)
-        logger.error(`Error occured : ${err}`, 'Database', 10)
-        let apiResponse = response.generate(true, 'Failed to register Event', 500, null)
-        res.send(apiResponse)
-    } else if (check.isEmpty(result)) {
-        let apiResponse = response.generate(true, 'Event not found', 404, null)
-        res.send(apiResponse)
-    } else {
-        console.log(result)
-        let apiResponse = response.generate(false, 'Event created', 200, result)
-        res.send(apiResponse)
-    }})
-} 
+    newEvent.save((err, result) => {
+        if (err) {
+            console.log(err)
+            logger.error(`Error occured : ${err}`, 'Database', 10)
+            let apiResponse = response.generate(true, 'Failed to register Event', 500, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            let apiResponse = response.generate(true, 'Event not found', 404, null)
+            res.send(apiResponse)
+        } else {
+            console.log(result)
+            let apiResponse = response.generate(false, 'Event created', 200, result)
+            res.send(apiResponse)
+        }
+    })
+}
 //end of create event function
 
 
@@ -690,22 +732,24 @@ let viewUserEvent = (req, res) => {
 }
 //end of view single Event function 
 
+
 module.exports = {
 
     signUpFunction: signUpFunction,
     loginFunction: loginFunction,
     logout: logout,
     getAllUser: getAllUser,
-    sendMail:sendMail,
-    changePassword:changePassword,
-    create:create,
-    viewUserEvent:viewUserEvent,
-    editEvent:editEvent,
-    viewSingleEvent:viewSingleEvent,
-    deleteEvent:deleteEvent,
-    sendCreatedMail:sendCreatedMail,
-    sendEditedMail:sendEditedMail,
-    sendDeletedMail:sendDeletedMail
+    sendMail: sendMail,
+    changePassword: changePassword,
+    create: create,
+    viewUserEvent: viewUserEvent,
+    editEvent: editEvent,
+    viewSingleEvent: viewSingleEvent,
+    deleteEvent: deleteEvent,
+    sendCreatedMail: sendCreatedMail,
+    sendEditedMail: sendEditedMail,
+    sendDeletedMail: sendDeletedMail,
+    sendAlarmMail: sendAlarmMail
 
 
 
