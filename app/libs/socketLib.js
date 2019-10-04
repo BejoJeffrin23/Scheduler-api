@@ -59,13 +59,14 @@ let setServer = (server) => {
             })
         }) // end of listening set-user event
 
-
+// event created soket functions
         socket.on('event-created', (adminName, userId, title) => {
             data = { adminName: adminName, userId: userId, title: title }
             controller.sendCreatedMail(data.userId, data.title)
             myIo.emit('event-created-notification', data);
         });
 
+        // event edited soket functions
         socket.on('event-edited', (adminName, userId, title) => {
             data = { adminName: adminName, userId: userId, title: title }
             controller.sendEditedMail(data.userId, data.title)
@@ -73,7 +74,7 @@ let setServer = (server) => {
         });
 
         
-
+// event deleted soket functions
         socket.on('event-deleted', (adminName, userId, title) => {
             data = { adminName: adminName, userId: userId, title: title }
 
@@ -82,17 +83,7 @@ let setServer = (server) => {
         });
 
 
-        socket.on('disconnect', () => {
-            let removeIndex = allOnlineUsers.map((user) => { return user.userId }).indexOf(socket.userId);
-            allOnlineUsers.splice(removeIndex, 1);
-
-            //refreshing and emitting new online users list
-            socket.to(socket.room).broadcast.emit('online', allOnlineUsers);
-            socket.leave(socket.room);
-            console.log('disconnected')
-            console.log(allOnlineUsers)
-        });//end of disconnect event
-
+//event for socket alarm
         setInterval(function () {
             data = {
                 min: new Date().getMinutes(),
@@ -110,6 +101,18 @@ let setServer = (server) => {
             }, 11000)
         });
 
+        socket.on('disconnect', () => {
+            let removeIndex = allOnlineUsers.map((user) => { return user.userId }).indexOf(socket.userId);
+            allOnlineUsers.splice(removeIndex, 1);
+
+            //refreshing and emitting new online users list
+            socket.to(socket.room).broadcast.emit('online', allOnlineUsers);
+            socket.leave(socket.room);
+            console.log('disconnected')
+            console.log(allOnlineUsers)
+        });//end of disconnect event
+
+    
 
     }
 

@@ -328,7 +328,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-//start of mail to reset password
+//start of send mail to reset password
 let sendMail = (req, res) => {
     if (req.body.email) {
         console.log(req.body);
@@ -376,7 +376,9 @@ let sendMail = (req, res) => {
         reject(apiResponse)
     }
 }
+//end of send mail function for resetting password
 
+//function to send mail to user on editing an event
 let sendEditedMail = (userId, title) => {
     if (userId) {
         UserModel.findOne({ userId: userId }, (err, userDetails) => {
@@ -416,10 +418,10 @@ let sendEditedMail = (userId, title) => {
     }
 }
 
+//end offunction to send mail to user on editing an event
 
 
-
-
+//function to send mail for event deleted
 let sendDeletedMail = (userId, title) => {
     if (userId) {
         UserModel.findOne({ userId: userId }, (err, userDetails) => {
@@ -458,6 +460,10 @@ let sendDeletedMail = (userId, title) => {
         reject(apiResponse)
     }
 }
+//end of mail during event deletion function
+
+
+//function to send mail on  start time of event
 
 let sendAlarmMail = (userId, title, name) => {
     if (userId) {
@@ -497,8 +503,10 @@ let sendAlarmMail = (userId, title, name) => {
         reject(apiResponse)
     }
 }
+////function to send mail on start time of event 
 
 
+//function to send mail on event creation
 let sendCreatedMail = (userId, title) => {
     if (userId) {
         UserModel.findOne({ userId: userId }, (err, userDetails) => {
@@ -537,8 +545,10 @@ let sendCreatedMail = (userId, title) => {
         reject(apiResponse)
     }
 }
+//end of function to send mail on event creation
 
 
+//start of change password function
 let changePassword = (req, res) => {
     UserModel.findOne({ 'userId': req.params.userId })
         .exec((err, result) => {
@@ -567,7 +577,7 @@ let changePassword = (req, res) => {
             }
         })
 }
-//end of edit Event function
+//end of change password function
 
 // start of log-out function
 
