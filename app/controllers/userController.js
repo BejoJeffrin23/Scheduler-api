@@ -622,6 +622,9 @@ let getAllUser = (req, res) => {
 }// end get all users
 
 
+
+
+
 //start of create event function
 
 let create = (req, res) => {
@@ -759,7 +762,7 @@ module.exports = {
     sendCreatedMail: sendCreatedMail,
     sendEditedMail: sendEditedMail,
     sendDeletedMail: sendDeletedMail,
-    sendAlarmMail: sendAlarmMail
+    sendAlarmMail: sendAlarmMail,
 
 
 

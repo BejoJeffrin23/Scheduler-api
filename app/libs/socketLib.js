@@ -2,8 +2,12 @@ const socketio = require('socket.io');
 const mongoose = require('mongoose');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
+const check = require('../libs/checkLib')
 const tokenLib = require("./tokenLib.js");
 const controller = require("../controllers/userController")
+
+
+const EventModel = mongoose.model('EventModel')
 
 
 
@@ -83,23 +87,41 @@ let setServer = (server) => {
         });
 
 
-//event for socket alarm
+//function for socket alarm
+
         setInterval(function () {
-            data = {
-                min: new Date().getMinutes(),
-                hours: new Date().getHours(),
-                month: new Date().getMonth(),
-                day: new Date().getDay()
-            }
-            myIo.emit('alarm', data)
+                EventModel.find()
+                .select(' -__v -_id')
+                    .lean()
+                    .exec((err, result) =>{
+                        if (err) {
+                            console.log(err)
+                            logger.error(err.message, 'User Controller: getAllEvents', 10)
+                        } else if (check.isEmpty(result)) {
+                            logger.info('No Event Found', 'User Controller: getAllEvents')
+                        } else {
+                            let min= new Date().getMinutes()
+                           let hours= new Date().getHours()
+                           let month= new Date().getMonth()
+                           let day= new Date().getDay()
+
+                            for (let x of result){
+                                m = (new Date(x.start).getMonth())
+                                d = (new Date(x.start).getDay())                        
+                                if (min +1== x.startMinute && hours == x.startHour && month == m && day == d) {
+                                console.log(x.userId)
+                                controller.sendAlarmMail(x.userId, x.title, x.adminName)
+                                data = { adminName: x.adminName, userId: x.userId, title: x.title }
+                                myIo.emit('alarm', data);
+
+                            }}
+
+                        }
+                    })
+            
         }, 59000)
 
-        socket.on('alarm-notify', (adminName, userId, title) => {
-            data = { adminName: adminName, userId: userId, title: title }
-            setTimeout(function () {
-                controller.sendAlarmMail(data.userId, data.title, data.adminName)
-            }, 11000)
-        });
+
 
         socket.on('disconnect', () => {
             let removeIndex = allOnlineUsers.map((user) => { return user.userId }).indexOf(socket.userId);
@@ -112,7 +134,6 @@ let setServer = (server) => {
             console.log(allOnlineUsers)
         });//end of disconnect event
 
-    
 
     }
 
