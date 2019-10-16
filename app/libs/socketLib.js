@@ -108,7 +108,7 @@ let setServer = (server) => {
                             for (let x of result){
                                 m = (new Date(x.start).getMonth())
                                 d = (new Date(x.start).getDay())                        
-                                if (min +1== x.startMinute && hours == x.startHour && month == m && day == d) {
+                                if (min -31== x.startMinute && hours-5 == x.startHour && month == m && day == d) {
                                 console.log(x.userId)
                                 controller.sendAlarmMail(x.userId, x.title, x.adminName)
                                 data = { adminName: x.adminName, userId: x.userId, title: x.title }
